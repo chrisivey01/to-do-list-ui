@@ -1,7 +1,7 @@
 //for local
 // const API = 'http://localhost:8080'
 //for prod
-const API = 'http://18.205.163.220'
+const API = 'http://18.209.63.46'
 
 
 
