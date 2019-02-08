@@ -1,28 +1,28 @@
 import React from 'react'
 import Service from '../services/Service'
 
-class Main extends React.Component{
+class Main extends React.Component {
 
-    state={
-        newItem:'',
-        alert:'',
-        to_do_list:[
+    state = {
+        newItem: '',
+        alert: '',
+        to_do_list: [
             {
-                item:''
+                item: ''
             }
         ]
     }
 
     inputChangeHandler = (e) => {
         this.setState({
-            newItem:e.currentTarget.value
+            newItem: e.currentTarget.value
         })
     }
 
     addItemHandler = () => {
         let to_do_list = this.state.to_do_list
 
-        if(to_do_list.length > 0) {
+        if (to_do_list.length > 0) {
             let updatedObj = {}
             updatedObj.item = this.state.newItem
             to_do_list.push(updatedObj)
@@ -37,12 +37,21 @@ class Main extends React.Component{
 
     deleteItemHandler = (i) => {
         let removedSlot = this.state.to_do_list;
-        let removedItem = removedSlot.splice(i,1)
+        let removedItem = removedSlot.splice(i, 1)
 
         this.setState({
-            to_do_list:removedSlot
+            to_do_list: removedSlot
         })
         Service.deleteItem(removedItem[0].item)
+            .then(response => {
+                this.setState({
+                    alert: response
+                })
+            })
+    }
+
+    sendTextHandler = () => {
+        Service.sendText()
             .then(response => {
                 this.setState({
                     alert:response
@@ -51,33 +60,39 @@ class Main extends React.Component{
     }
 
 
-    componentWillMount(){
+    componentWillMount() {
         Service.loadList()
             .then(response => {
                 this.setState({
-                    to_do_list:response
+                    to_do_list: response
                 })
             })
     }
 
-    render(){
+    render() {
         const {to_do_list} = this.state
-        return(
+        return (
             <div>
                 <div>
-                {this.state.alert !== '' ? this.state.alert : null}
+                    {this.state.alert !== '' ? this.state.alert : null}
                 </div>
-                <input value={this.state.newItem} onChange={(e)=>this.inputChangeHandler(e)}/>
-                <button onClick={()=>this.addItemHandler()}>Add Item</button>
-                <ul>
-                {
-                    to_do_list.map((item, i)=>{
-                        return(
-                            <li onClick={()=>this.deleteItemHandler(i)} style={{listStyle:'none'}}>{item.item}</li>
-                        )
-                    })
-                }
-                </ul>
+                <input value={this.state.newItem} onChange={(e) => this.inputChangeHandler(e)}/>
+                <button onClick={() => this.addItemHandler()}>Add Item</button>
+                <div>
+                    <ul>
+                        {
+                            to_do_list.map((item, i) => {
+                                return (
+                                    <li onClick={() => this.deleteItemHandler(i)}
+                                        style={{listStyle: 'none'}}>{item.item}</li>
+                                )
+                            })
+                        }
+                    </ul>
+                </div>
+                <div>
+                    <button onClick={this.sendTextHandler}>Send Text</button>
+                </div>
             </div>
 
         )

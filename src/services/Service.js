@@ -1,7 +1,9 @@
 //for local
-const API = 'http://localhost:8080'
+// const API = 'http://localhost:8080'
 //for prod
-// const API = 'http://54.175.138.146'
+const API = 'http://18.205.163.220'
+
+
 
 
 export default {
@@ -30,10 +32,10 @@ export default {
             body: item
         })
         .then(res => res.text())
-            // .then(response => response.json())
-        //     {
-        //
-        //     body:JSON.stringify(id)
-        // })
+    },
+
+    sendText(){
+        return fetch(API+'/text')
+            .then(res => res.text())
     }
 }
