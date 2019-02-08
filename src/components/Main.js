@@ -5,6 +5,7 @@ class Main extends React.Component{
 
     state={
         newItem:'',
+        alert:'',
         to_do_list:[
             {
                 item:''
@@ -15,8 +16,6 @@ class Main extends React.Component{
     inputChangeHandler = (e) => {
         this.setState({
             newItem:e.currentTarget.value
-        },()=>{
-            console.log(this.state.newItem)
         })
     }
 
@@ -25,7 +24,6 @@ class Main extends React.Component{
 
         if(to_do_list.length > 0) {
             let updatedObj = {}
-            updatedObj.id = to_do_list.length++
             updatedObj.item = this.state.newItem
             to_do_list.push(updatedObj)
 
@@ -44,9 +42,11 @@ class Main extends React.Component{
         this.setState({
             to_do_list:removedSlot
         })
-        Service.deleteItem(removedItem[0].id)
+        Service.deleteItem(removedItem[0].item)
             .then(response => {
-                console.log(response)
+                this.setState({
+                    alert:response
+                })
             })
     }
 
@@ -56,8 +56,6 @@ class Main extends React.Component{
             .then(response => {
                 this.setState({
                     to_do_list:response
-                },()=>{
-                  console.log(response)
                 })
             })
     }
@@ -66,6 +64,9 @@ class Main extends React.Component{
         const {to_do_list} = this.state
         return(
             <div>
+                <div>
+                {this.state.alert !== '' ? this.state.alert : null}
+                </div>
                 <input value={this.state.newItem} onChange={(e)=>this.inputChangeHandler(e)}/>
                 <button onClick={()=>this.addItemHandler()}>Add Item</button>
                 <ul>
