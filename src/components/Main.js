@@ -1,6 +1,6 @@
 import React from 'react'
 import Service from '../services/Service'
-
+import List from './List'
 class Main extends React.Component {
 
     state = {
@@ -33,6 +33,10 @@ class Main extends React.Component {
             Service.postItem(this.state.newItem)
                 .then(console.log('posted'))
         }
+
+        this.setState({
+            newItem:''
+        })
     }
 
     deleteItemHandler = (i) => {
@@ -76,23 +80,15 @@ class Main extends React.Component {
                 <div>
                     {this.state.alert !== '' ? this.state.alert : null}
                 </div>
-                <input value={this.state.newItem} onChange={(e) => this.inputChangeHandler(e)}/>
-                <button onClick={() => this.addItemHandler()}>Add Item</button>
-                <div>
-                    <ul>
-                        {
-                            to_do_list.map((item, i) => {
-                                return (
-                                    <li onClick={() => this.deleteItemHandler(i)}
-                                        style={{listStyle: 'none'}}>{item.item}</li>
-                                )
-                            })
-                        }
-                    </ul>
-                </div>
-                <div>
-                    <button onClick={this.sendTextHandler}>Send Text</button>
-                </div>
+
+                <List
+                    newItem={this.state.newItem}
+                    to_do_list={to_do_list}
+                    inputChangeHandler={(e)=>this.inputChangeHandler(e)}
+                    addItemHandler={()=>this.addItemHandler()}
+                    deleteItemHandler={this.deleteItemHandler}
+                />
+                <button onClick={this.sendTextHandler}>Send Text</button>
             </div>
 
         )
