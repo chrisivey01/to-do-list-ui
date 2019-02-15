@@ -1,16 +1,19 @@
 import React from 'react'
 import Service from '../services/Service'
 import List from './List'
+import Popup from './Popup'
 class Main extends React.Component {
 
     state = {
         newItem: '',
         alert: '',
+        itemHandler:'',
         to_do_list: [
             {
                 item: ''
             }
-        ]
+        ],
+        showPopup: false
     }
 
     inputChangeHandler = (e) => {
@@ -39,7 +42,15 @@ class Main extends React.Component {
         })
     }
 
-    deleteItemHandler = (i) => {
+    deleteHandler = (i) =>{
+        this.deletePopup(i);
+        this.setState({
+            itemHandler:i
+        })
+    }
+
+    deleteItemHandler = () => {
+        let i = this.state.itemHandler
         let removedSlot = this.state.to_do_list;
         let removedItem = removedSlot.splice(i, 1)
 
@@ -52,6 +63,17 @@ class Main extends React.Component {
                     alert: response
                 })
             })
+
+        this.setState({
+            showPopup:!this.state.showPopup
+        })
+
+    }
+
+    deletePopup = () => {
+        this.setState({
+            showPopup:!this.state.showPopup
+        })
     }
 
     sendTextHandler = () => {
@@ -74,19 +96,25 @@ class Main extends React.Component {
     }
 
     render() {
-        const {to_do_list} = this.state
+        const {to_do_list, showPopup} = this.state
         return (
             <div>
                 <div>
                     {this.state.alert !== '' ? this.state.alert : null}
                 </div>
+                {
+                    showPopup ?
+                        <Popup
+                            deleteItemHandler={this.deleteItemHandler}
+                            deletePopup={this.deletePopup}/> : null
+                }
 
                 <List
                     newItem={this.state.newItem}
                     to_do_list={to_do_list}
                     inputChangeHandler={(e)=>this.inputChangeHandler(e)}
                     addItemHandler={()=>this.addItemHandler()}
-                    deleteItemHandler={this.deleteItemHandler}
+                    deleteHandler={this.deleteHandler}
                 />
                 <button onClick={this.sendTextHandler}>Send Text</button>
             </div>

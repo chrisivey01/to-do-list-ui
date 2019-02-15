@@ -8,6 +8,13 @@
   overflow: auto;
 }
 
+.popup{
+  background-color:rgb(105,105,105);
+  width:200px;
+  display:block;
+  margin:auto;
+}
+
 li:hover{
   background-color:purple;
 }

@@ -10,7 +10,7 @@ const List = (props) => {
                     {
                         props.to_do_list.map((item, i) => {
                             return (
-                                <li onClick={() => props.deleteItemHandler(i)}
+                                <li onClick={() => props.deleteHandler(i)}
                                     style={{listStyle: 'none'}}>{item.item}</li>
                             )
                         })
